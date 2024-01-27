@@ -10,8 +10,6 @@ public class Riddles {
         double numRandom = Math.ceil(Math.random()*10);
         boolean start = true;
 
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
         while (start){
             System.out.println("------ MENU ------");
             System.out.println("1) Star game \n2) Exit ");
