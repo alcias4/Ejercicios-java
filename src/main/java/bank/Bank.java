@@ -12,14 +12,15 @@ public class Bank {
         Scanner scanner = new Scanner(System.in);
         Bank bank = new Bank();
         List<Account> list = new ArrayList<>();
-
+        list.add(new Account("Uni", 150));
+        list.add(new Account("house", 350));
         boolean start = true;
         System.out.print("Enter the total money: ");
         double total = scanner.nextDouble();
 
         while (start){
             System.out.println("--------- Menu ---------");
-            System.out.println("1) Create account \n2) Add an account money \n3) Remove Account \n4) Send money \n5) View account list \n6) Exit");
+            System.out.println("1) Create account \n2) Add an account money \n3) Remove Account \n4) Send money \n5) View account list \n6) Remove account money \n7) Exit");
             System.out.print("Enter option: ");
             int option = scanner.nextInt();
             switch (option){
@@ -34,13 +35,18 @@ public class Bank {
                     break;
                 case 4:
                     total = bank.sendingMoney(total);
-                    System.out.println("Press the key enter for return: ");
+                    System.out.print("Press the key enter for return: ");
+                    scanner.nextLine();
                     break;
                 case 5:
-                    bank.seeAccounts(list, total);
+                    bank.seeAccounts(list, total,"List Account");
+                    System.out.print("Press the key enter for return: ");
+                    scanner.nextLine();
                     break;
                 case 6:
-                    System.out.println("Hello world");
+                    total = bank.removeMoneyAccount( total, list);
+                    System.out.print("Press the key enter for return: ");
+                    scanner.nextLine();
                     break;
                 case 7:
                     start = false ;
@@ -49,7 +55,7 @@ public class Bank {
                     System.out.println("Option incorrect!");
                     break;
             }
-
+            scanner.nextLine();
         }
 
     }
@@ -71,23 +77,21 @@ public class Bank {
     }
 
 
-    void seeAccounts (List<Account> list, double total){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("---- Transfer ----");
+    void seeAccounts (List<Account> list, double total, String title){
+
+        System.out.println("---- " + title + "----");
         System.out.println(" Total money: " + total);
+        int count = 1;
         for(Account se : list){
-            System.out.println(se.seeInfo());
+            System.out.println( count +") " + se.seeInfo());
+            count++;
         }
-        System.out.print("Press the key enter for return: ");
-        scanner.nextLine();
     }
 
     void transfer (List<Account> list, double total){
         Scanner scanner = new Scanner(System.in);
         Bank bank = new Bank();
-
-        System.out.println("---- Transfer ----");
-        bank.seeAccounts(list, total);
+        bank.seeAccounts(list, total, "Transfer");
         System.out.print("Enter name of the Account you want transfer: ");
         String nam = scanner.nextLine();
         for (Account account : list) {
@@ -107,8 +111,7 @@ public class Bank {
     List<Account>  removeAccount (List<Account> list, double total){
         Scanner scanner = new Scanner(System.in);
         Bank bank = new Bank();
-        System.out.println("---- Remove ----");
-        bank.seeAccounts(list,total);
+        bank.seeAccounts(list,total, "Remove");
         System.out.print("Enter name of the Account you want remove: ");
         String nam = scanner.nextLine();
         for (Account account:list){
@@ -138,8 +141,6 @@ public class Bank {
             System.out.println("Name: " + name);
             System.out.println("Number Card: " + numberCard);
             System.out.println("Amount: " + money);
-            System.out.print("Press the key enter for return: ");
-            scanner.nextLine();
 
             return total - money;
         }
@@ -149,5 +150,22 @@ public class Bank {
         return total;
 
     }
+
+    double removeMoneyAccount (double total, List<Account> list){
+        Scanner scanner = new Scanner(System.in);
+        this.seeAccounts(list, total,"Remove account money");
+        System.out.println("Enter index of Account: ");
+        int i = scanner.nextInt();
+        System.out.println("Enter Amount: ");
+        double money = scanner.nextDouble();
+        if(money <= list.get(i - 1).money){
+            list.get(i -1).money = list.get(i -1).money - money;
+
+            return  total + money;
+        }
+        System.out.println("Error");
+        return total;
+    }
+
 
 }
